@@ -1,13 +1,13 @@
 import re
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from app.apps.user.schemas.user import CreateUser, Login, LoginResponse
+from app.root.schemas.user import CreateUser, Login, LoginResponse
 from app.db import get_db
 from app.enum.user_types import UserType
 from app.exceptions import CustomException
 from app.services.password_hash import hash_password, verify_password
 from app.services.token import create_access_token
-from app.apps.user.models.models import User
+from app.root.models.models import User
 from app.services.email_validator import is_valid_email
 
 

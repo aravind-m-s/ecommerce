@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
-from app.apps.user.models import models
+from app.root.models import models
 
 load_dotenv()
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.openapi.models import HTTPBearer
 from starlette.responses import JSONResponse
-from app.apps.user.router import router as user_router
+from app.root.router import router as root_router
 from app.exceptions import CustomException
 
 
@@ -9,16 +9,14 @@ app = FastAPI(
     title="Ecommerce API",
     description="Ecommerce API",
     version="0.0.1",
-    docs_url=None,
 )
+app.include_router(root_router)
 
 user_app = FastAPI(
     title="User API",
     description="User API",
     version="0.0.1",
 )
-
-user_app.include_router(user_router)
 
 
 admin_app = FastAPI(

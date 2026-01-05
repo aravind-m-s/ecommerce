@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends
-from app.apps.user.modules.auth.auth import login, register
+from fastapi import APIRouter
+from app.root.modules.auth.auth import login, register
 
 
 router = APIRouter(
