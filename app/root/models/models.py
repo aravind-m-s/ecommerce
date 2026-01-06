@@ -14,6 +14,7 @@ class User(Base):
     type = Column(String, nullable=False, default=UserType.USER.value)
     status = Column(Boolean, nullable=False, default=True)
     created_at = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    deleted_at = Column(DateTime, nullable=True)
     updated_at = Column(
         DateTime,
         nullable=False,

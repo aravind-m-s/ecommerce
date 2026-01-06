@@ -14,40 +14,35 @@ from app.services.email_validator import is_valid_email
 def login(user: Login, db: Session = Depends(get_db)):
 
     if not is_valid_email(user.email):
-        raise CustomException(status_code=422, data={"email": "Invalid email"})
+        return CustomException(status_code=422, data={"email": "Invalid email"})
 
     db_user = (
         db.query(User)
-        .filter(User.email == user.email and User.type == UserType.USER.name)
+        .filter(User.email == user.email and User.type == UserType.USER.value)
         .first()
     )
 
     if not db_user:
-        raise CustomException(status_code=422, data={"email": "Invalid email"})
+        return CustomException(status_code=422, data={"email": "Email does not exist"})
 
     if not db_user.status:
-        raise CustomException(status_code=422, data={"email": "User is not active"})
+        return CustomException(status_code=422, data={"email": "User is not active"})
 
     if not verify_password(user.password, db_user.password):
-        raise CustomException(status_code=422, data={"password": "Invalid password"})
+        return CustomException(status_code=422, data={"password": "Invalid password"})
 
     response_user = LoginResponse.model_validate(db_user)
-    token = create_access_token({"id": str(db_user.id), "email": db_user.email})
+    token = create_access_token({"sub": str(db_user.id), "email": db_user.email})
     response_user.access_token = token
     db.close()
     return response_user
 
 
 def register(user: CreateUser, db: Session = Depends(get_db)):
-
     if not is_valid_email(user.email):
         raise CustomException(status_code=422, data={"email": "Invalid email"})
 
-    db_user = (
-        db.query(User)
-        .filter(User.email == user.email, User.type == UserType.USER.name)
-        .first()
-    )
+    db_user = db.query(User).filter(User.email == user.email).first()
 
     if db_user:
         raise CustomException(status_code=422, data={"email": "User already exists"})
@@ -61,6 +56,6 @@ def register(user: CreateUser, db: Session = Depends(get_db)):
     db.close()
 
     response_user = LoginResponse.model_validate(db_user)
-    token = create_access_token({"id": str(db_user.id), "email": db_user.email})
+    token = create_access_token({"sub": str(db_user.id), "email": db_user.email})
     response_user.access_token = token
     return response_user

@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from fastapi.openapi.models import HTTPBearer
 from starlette.responses import JSONResponse
 from app.root.router import router as root_router
 from app.exceptions import CustomException
+from app.apps.admin.router import router as admin_router
 
 
 app = FastAPI(
@@ -24,6 +24,7 @@ admin_app = FastAPI(
     description="Admin API",
     version="0.0.1",
 )
+admin_app.include_router(admin_router)
 
 app.mount("/user", user_app)
 app.mount("/admin", admin_app)
@@ -31,6 +32,7 @@ app.mount("/admin", admin_app)
 # migrate()
 
 
+@app.exception_handler(CustomException)
 @admin_app.exception_handler(CustomException)
 @user_app.exception_handler(CustomException)
 async def custom_exception_handler(request, exc):

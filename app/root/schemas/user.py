@@ -7,6 +7,8 @@ class User(BaseModel):
     id: UUID
     name: str
     email: str
+    type: str
+    status: bool
 
 
 class CreateUser(BaseModel):
