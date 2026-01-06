@@ -1,14 +1,24 @@
 from logging.config import fileConfig
+import os
 
+from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
 
 from app.base import Base
-from app.root.models import models
+from app.root.models import *
 
 config = context.config
+
+load_dotenv()
+
+# Fetch the database URL from the environment variable
+db_url = os.getenv("DATABASE_URL")
+
+if not db_url:
+    raise ValueError("DATABASE_URL environment variable is not set!")
 
 
 # # Interpret the config file for Python logging.
@@ -40,9 +50,8 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url,
+        url=db_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
