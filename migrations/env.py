@@ -20,6 +20,8 @@ db_url = os.getenv("DATABASE_URL")
 if not db_url:
     raise ValueError("DATABASE_URL environment variable is not set!")
 
+config.set_main_option("sqlalchemy.url", db_url.replace("postgres://", "postgresql://"))
+
 
 # # Interpret the config file for Python logging.
 # # This line sets up loggers basically.
