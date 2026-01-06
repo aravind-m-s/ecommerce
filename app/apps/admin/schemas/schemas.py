@@ -1,3 +1,4 @@
+from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel
 
@@ -13,3 +14,29 @@ class CreateUser(BaseModel):
 
 class UpdateUser(CreateUser):
     status: bool
+
+
+class Category(BaseModel):
+    id: UUID
+    name: str
+
+
+class Product(BaseModel):
+    name: str
+    description: str
+    price: float
+    stock: int
+    category: Category
+
+
+class CreateUpdateProduct(BaseModel):
+    name: str
+    description: str
+    price: float
+    stock: int
+    parent_id: Optional[UUID] = None
+    category_id: UUID
+
+
+class CreateUpdateCategory(BaseModel):
+    name: str
